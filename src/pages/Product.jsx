@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { fetchProductById } from "../services/store.services";
 import { Car, Product } from "../utils/car";
 
@@ -38,9 +39,20 @@ function ProductDetail() {
     car.addToCar(newProduct);
     window.localStorage.setItem("car", JSON.stringify(car));
   }
+  function removeFromCart(productId) {
+    //OBTIENE LOS DATOS DEL CARRITO DEL LOCALSTORAGE Y CONSTRUYE UNA INSTANCIA DE CAR
+    const carData = JSON.parse(window.localStorage.getItem("car"));
+    // CREA UNA INSTANCIA DE CAR CON LOS PRODUCTOS DEL CARRITO
+    const car = new Car(carData.products, carData.total, carData.quantity);
+    // ELIMINA EL PRODUCTO CON EL ID PASADO POR PARAMETRO
+    car.removeFromCar(productId);
+    // GUARDA LOS NUEVOS DATOS EN EL LOCALSTORAGE
+    window.localStorage.setItem("car", JSON.stringify(car));
+  }
 
   return (
     <div>
+      <Navbar/>
       {!product ? ( // SI EL PRODUCTO NO ESTA CARGADO, MUESTRA UN MENSAJE
         <div className="flex items-center justify-center h-screen w-screen text-5xl text-slate-700 font-bold">
           Cargando info del producto...
@@ -57,6 +69,12 @@ function ProductDetail() {
             className="w-full border rounded-lg hover:bg-gray-400"
           >
             Agregar al carrito
+          </button>
+          <button
+            onClick={() => removeFromCart(product.id)}
+            className="w-full border rounded-lg hover:bg-gray-400"
+          >
+            Eliminar al carrito
           </button>
         </div>
       )}

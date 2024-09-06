@@ -49,18 +49,24 @@ export class Car {
   removeFromCar(productId) {
     //ELIMINA UN PRODUCTO DEL CARRITO BUSCANDO POR EL ID, DISMINUYENDO LA CANTIDAD
     //Y ACTUALIZANDO EL SUBTOTAL
-    this.products = this.products.map((product, index) => {
-      if (product.id === productId && product.quantity == 1) {
-        return this.products.splice(index, 1);
-      } else if (product.id === productId && product.quantity !== 1) {
-        return {
-          ...product,
-          quantity: product.quantity - 1,
-          subtotal: product.price * (product.quantity - 1),
-        };
-      }
-      /*  return product; */
-    });
+
+    //PRIMERO MAPEA LOS PRODUCTOS BUSCANDO POR EL ID Y DISMINUYENDO LA CANTIDAD
+    this.products = this.products
+      .map((product) => {
+        //SI EL ID DEL PRODUCTO EN LA ITERACION ES IGUAL AL BUSCADO ID BUSCADO
+        //DISMINUYE UNA UNIDAD A LA CANTIDAD DEL PRODUCTO
+        if (product.id === productId) {
+          return {
+            ...product,
+            quantity: product.quantity - 1,
+            subtotal: product.price * (product.quantity - 1),
+          };
+        }
+        return product;
+      })
+      //FILTRA LOS PRODUCTOS SIN CANTIDAD (ELIMINA LOS PRODUCTOS QUE TENGAN CANTIDAD EN 0)
+      .filter((product) => product.quantity !== 0);
+    //ACTUALIZA EL TOTAL Y LA CANTIDAD DEL CARRITO
     this.total = this.products.reduce((acc, curr) => acc + curr.subtotal, 0);
     this.quantity = this.products.reduce((acc, curr) => acc + curr.quantity, 0);
   }

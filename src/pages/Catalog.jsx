@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { fetchProducts } from "../services/store.services";
 
 function Catalog() {
@@ -18,6 +19,7 @@ function Catalog() {
 
   return (
     <div>
+      <Navbar/> 
       <ul className="w-full h-full flex flex-wrap gap-2 justify-evenly py-4">
         {products //SI LOS PRODUCTOS ESTAN CARGADOS, MAPEA Y MUESTRA LOS PRODUCTOS
           ? products.map((product, index) => (
